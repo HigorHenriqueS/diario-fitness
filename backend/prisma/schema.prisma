@@ -1,0 +1,87 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  status    Boolean @default(true)
+  dt_nascimento      DateTime? @db.Date
+  sexo      Boolean?
+  imagem    Bytes?
+  createdAt DateTime @default(now())
+
+  pesos     Peso[]
+  treinos   Treino[]
+  cardapios  Cardapios[]
+
+}
+
+
+model Peso {
+  id         Int      @id @default(autoincrement())
+  pessoa_id  Int
+  pessoa     User  @relation(fields: [pessoa_id], references: [id])
+  peso       Decimal
+  altura     Decimal
+  imc        Decimal?
+  tmb        Decimal?
+  data       DateTime @db.Date
+  observacao String @db.Text
+  createdAt DateTime @default(now())
+}
+
+model Treino {
+  id         Int      @id @default(autoincrement())
+  pessoa_id  Int
+  pessoa     User  @relation(fields: [pessoa_id], references: [id])
+  nome       String
+  descricao  String @db.Text
+  grupo_muscular     String
+  imagem    Bytes?
+  series    Int
+  repeticoes    String
+  observacao String @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Alimentos {
+  id          Int      @id @default(autoincrement())
+  nome        String
+  calorias    Decimal?
+  proteinas   Decimal?
+  carboidratos Decimal?
+  gorduras    Decimal?
+  fibras      Decimal?
+
+  createdAt    DateTime @default(now())
+
+  @@index([nome])
+
+  cardapios  Cardapios[]
+
+}
+
+model Cardapios {
+  id         Int      @id @default(autoincrement())
+  pessoa_id  Int
+  pessoa     User  @relation(fields: [pessoa_id], references: [id])
+  alimento_id  Int
+  alimento   Alimentos  @relation(fields: [alimento_id], references: [id])
+  data      DateTime @db.Date
+  refeicao   Int
+  peso_alimento      Decimal
+  calorias_alimento    Decimal
+  observacao String? @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
