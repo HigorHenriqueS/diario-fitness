@@ -1,4 +1,4 @@
-import { Body, Controller, Get, UseGuards, Req, Post, Param,
+import { BadRequestException, Body, Controller, Get, UseGuards, Req, Post, Param,
   UseInterceptors,UploadedFile} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtGuard } from '../auth/jwt/jwt.guard';
@@ -180,21 +180,25 @@ export class UsersController {
   }
 
   @Post('verificar_email')
-  async verificar_email(@Req() req) {
-   const email = req.body.email
-   const vef_email = await this.prisma.user.findFirst({
-      where: {
-        email: email,
-        status: true
-      },
-      
-    });
-  
-    if(vef_email === null){
-      return 0;
-    }else{
-      return this.usersService.enviarRecuperacao(email);
+  async verificar_email(@Body() dados: { email?: unknown }) {
+    if (typeof dados?.email !== 'string' || !dados.email.trim()) {
+      throw new BadRequestException('Informe seu e-mail.');
     }
+
+    const user = await this.prisma.user.findFirst({
+      where: { email: dados.email.trim(), status: true },
+      select: { id: true, email: true, password: true },
+    });
+
+    if (user) {
+      await this.usersService.enviarRecuperacao(user);
+    }
+
+    return { message: 'Se o e-mail estiver cadastrado, você receberá o link de recuperação.' };
   }
 
+  @Post('resetar-senha')
+  async resetarSenha(@Body() dados: { token?: unknown; password?: unknown }) {
+    return this.usersService.resetarSenha(dados?.token, dados?.password);
+  }
 }

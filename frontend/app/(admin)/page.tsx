@@ -200,7 +200,7 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {/* Stats */}
+      {/* Stats
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => (
           <div
@@ -239,7 +239,7 @@ export default function Dashboard() {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
 
       {/* Charts - primeira linha */}
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
@@ -316,7 +316,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Status */}
+        {/* Status
         <div
           className="
             rounded-xl border border-gray-200 bg-white p-5 shadow-sm
@@ -369,10 +369,10 @@ export default function Dashboard() {
               </PieChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </div> */}
       </div>
 
-      {/* Charts - segunda linha */}
+      {/* Charts - segunda linha
       <div className="mt-6">
         <div
           className="
@@ -439,7 +439,7 @@ export default function Dashboard() {
             </ResponsiveContainer>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

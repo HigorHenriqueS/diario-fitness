@@ -58,32 +58,27 @@ export default function LoginPage() {
     }
   }
 
-  async function RecuperarSenha(fields: object) {
-  
-     const resposta = await fetch("http://localhost:3000/users/verificar_email", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-         body: JSON.stringify({
-            email: fields.email,
-          }),
-        });
-  
-      const dados = await resposta.json();
+  async function RecuperarSenha(fields: { email: string }) {
+    try {
+      const resposta = await fetch("http://localhost:3000/users/verificar_email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: fields.email }),
+      });
 
-      
-      if (dados === 0) {
-        toast.error("E-mail não cadastrado. Confira o endereço informado.");
-        return;
+      if (!resposta.ok) {
+        throw new Error("Não foi possível solicitar a recuperação. Tente novamente.");
       }
 
-      toast.success("E-mail localizado com sucesso.");
-      
-  
+      const dados = await resposta.json();
+      toast.success(dados.message);
+      setModalEsqueciSenha(false);
+    } catch {
+      toast.error("Não foi possível solicitar a recuperação. Tente novamente.");
+    }
   }
-
-
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100">

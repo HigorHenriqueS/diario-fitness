@@ -1,4 +1,4 @@
-export function recuperacaoSenhaTemplate() {
+export function recuperacaoSenhaTemplate(link: string) {
   return `
     <!DOCTYPE html>
     <html>
@@ -25,12 +25,12 @@ export function recuperacaoSenhaTemplate() {
           </h1>
 
           <p>
-            Você solicitou a recuperação da sua senha.
+            Você solicitou a recuperação da sua senha. O link expira em 30 minutos.
           </p>
 
           <div style="text-align: center; margin: 30px 0;">
             <a
-              href="http://localhost:3001/resetar-senha"
+              href="${link}"
               style="
                 background-color: #2563eb;
                 color: white;
